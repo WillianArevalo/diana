@@ -1,20 +1,21 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
-
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/**/*.blade.php',
-        './resources/**/*.js',
-        './resources/**/*.vue',
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
     ],
     theme: {
         extend: {
+            colors: {
+                primary: "#941212",
+                secondary: "#ffde59",
+            },
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                poppins: ["Poppins", "sans-serif"],
+                roboto: ["Roboto", "sans-serif"],
             },
         },
     },
-    plugins: [],
+    plugins: [require("tailwindcss-animated")],
 };
