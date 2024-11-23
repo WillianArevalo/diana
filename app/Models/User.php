@@ -22,6 +22,7 @@ class User extends Authenticatable
         'cod_user',
         'password',
         'role',
+        'workplace_id',
     ];
 
     /**
@@ -45,5 +46,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function marks()
+    {
+        return $this->hasMany(Marking::class);
+    }
+
+    public function workplace()
+    {
+        return $this->belongsTo(Workplace::class, "workplace_id");
+    }
+
+    public function seventh()
+    {
+        return $this->hasOne(Seventh::class);
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class, "schedule_id");
     }
 }
