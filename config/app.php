@@ -123,4 +123,13 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'lat_empresa' => env('APP_LAT_EMPRESA', env('LAT_EMPRESA')),
+    'lng_empresa' => env('APP_LNG_EMPRESA', env('LNG_EMPRESA')),
+
+
+    'aws' => [
+        'access_key_id' => env('AWS_ACCESS_KEY_ID'),
+        'secret_access_key' => env('AWS_SECRET_ACCESS_KEY'),
+        'default_region' => env('AWS_DEFAULT_REGION'),
+    ],
 ];
