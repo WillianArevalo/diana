@@ -27,13 +27,15 @@
             <img src="{{ asset('images/diana.png') }}" alt="bg" class="h-14 w-full object-cover">
         </div>
         <div class="flex items-center gap-4">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit"
-                    class="rounded-lg bg-white px-4 py-2 text-primary transition-all hover:bg-zinc-200">
-                    Cerrar sesión
-                </button>
-            </form>
+            @if (Auth::check() && Auth::user())
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="rounded-lg bg-white px-4 py-2 text-primary transition-all hover:bg-zinc-200">
+                        Cerrar sesión
+                    </button>
+                </form>
+            @endif
             <img src="{{ asset('images/logo-esen.png') }}" alt="bg" class="h-20 w-20 object-contain">
         </div>
     </div>

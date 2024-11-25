@@ -1,10 +1,8 @@
 @extends('layouts.template')
-
 @section('title', 'Iniciar sesión')
-
 @section('content')
     <div class="absolute top-0 flex h-screen w-full items-center justify-center">
-        <div class="w-96 rounded-lg bg-white p-6 shadow-md">
+        <div class="mx-4 w-full rounded-lg bg-white p-6 shadow-md md:w-96">
             <h1 class="mb-4 text-center font-roboto text-2xl font-bold uppercase text-primary">
                 Bienvenido/a
             </h1>

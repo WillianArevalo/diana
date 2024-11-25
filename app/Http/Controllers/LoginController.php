@@ -11,6 +11,20 @@ class LoginController extends Controller
 {
     public function index()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            switch ($user->role) {
+                case "collaborator":
+                    return redirect()->route("colaboradores.dashboard");
+                case "facilitator":
+                    return redirect()->route("facilitadores.dashboard");
+                case "rrhh":
+                    return redirect()->route("rrhh.dashboard");
+                default:
+                    return redirect()->route("login");
+            }
+        }
+
         return view("login");
     }
 

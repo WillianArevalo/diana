@@ -265,7 +265,6 @@ class RRHHController extends Controller
                     });
                 }
 
-
                 $hours_schedule = 0;
 
                 if ($type_schedule == "day") {

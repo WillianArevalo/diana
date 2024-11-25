@@ -1,7 +1,7 @@
 @extends('layouts.template')
 @section('title', 'Dashboard | Facilitadores')
 @section('content')
-    <div class="flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center justify-center overflow-x-hidden">
         <div class="mt-8 text-center">
             <h1 class="mt-4 font-roboto text-2xl font-bold uppercase text-secondary">
                 Centro de trabajo {{ $workplace->id }}
@@ -15,70 +15,72 @@
                 Horarios de trabajo asignados:
             </h2>
             @if ($schedules)
-                <table class="mt-4 divide-y divide-gray-200">
-                    <thead class="bg-zinc-200 font-roboto">
-                        <tr>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
-                                Tipo
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
-                                Fecha de inicio
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
-                                Fecha de fin
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
-                                Hora de inicio
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
-                                Hora de fin
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
-                                Hora de inicio de descanso
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
-                                Hora de fin de descanso
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white font-poppins">
-                        @foreach ($schedules as $schedule)
+                <div class="overflow-x-auto">
+                    <table class="mt-4 divide-y divide-gray-200 overflow-x-auto">
+                        <thead class="bg-zinc-200 font-roboto">
                             <tr>
-                                <td class="px-6 py-4 text-sm text-zinc-800">
-                                    {{ $schedule->type === 'day' ? 'Diurno' : 'Nocturno' }}
-                                </td>
-                                <td class="px-6 py-4 text-sm text-zinc-800">{{ $schedule->date_start }}</td>
-                                <td class="px-6 py-4 text-sm text-zinc-800">{{ $schedule->date_end }}</td>
-                                <td class="px-6 py-4 text-sm text-zinc-800">
-                                    {{ \Carbon\Carbon::parse($schedule->time_start)->format('h:i A') }}
-                                </td>
-                                <td class="px-6 py-4 text-sm text-zinc-800">
-                                    {{ \Carbon\Carbon::parse($schedule->time_end)->format('h:i A') }}
-                                </td>
-                                <td class="px-6 py-4 text-sm text-zinc-800">
-                                    {{ \Carbon\Carbon::parse($schedule->break_start)->format('h:i A') }}
-                                </td>
-                                <td class="px-6 py-4 text-sm text-zinc-800">
-                                    {{ \Carbon\Carbon::parse($schedule->break_end)->format('h:i A') }}
-                                </td>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
+                                    Tipo
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
+                                    Fecha de inicio
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
+                                    Fecha de fin
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
+                                    Hora de inicio
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
+                                    Hora de fin
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
+                                    Hora de inicio de descanso
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
+                                    Hora de fin de descanso
+                                </th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white font-poppins">
+                            @foreach ($schedules as $schedule)
+                                <tr>
+                                    <td class="px-6 py-4 text-sm text-zinc-800">
+                                        {{ $schedule->type === 'day' ? 'Diurno' : 'Nocturno' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-zinc-800">{{ $schedule->date_start }}</td>
+                                    <td class="px-6 py-4 text-sm text-zinc-800">{{ $schedule->date_end }}</td>
+                                    <td class="px-6 py-4 text-sm text-zinc-800">
+                                        {{ \Carbon\Carbon::parse($schedule->time_start)->format('h:i A') }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-zinc-800">
+                                        {{ \Carbon\Carbon::parse($schedule->time_end)->format('h:i A') }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-zinc-800">
+                                        {{ \Carbon\Carbon::parse($schedule->break_start)->format('h:i A') }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-zinc-800">
+                                        {{ \Carbon\Carbon::parse($schedule->break_end)->format('h:i A') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             @else
                 <p class="mt-4 text-center font-poppins text-sm text-zinc-200">
                     No hay horarios asignados
                 </p>
             @endif
         </div>
-        <div class="mb-4 mt-10 w-3/4 overflow-x-auto font-roboto text-white">
+        <div class="mb-4 mt-10 w-full overflow-x-auto px-4 font-roboto text-white lg:w-3/4">
             <div class="mb-4 flex items-center justify-end gap-4">
                 @if (count($schedules) < 2)
                     <a href="{{ route('horarios.create') }}"
@@ -136,7 +138,7 @@
                                 {{ $user->cod_user }}
                             </td>
                             <td class="px-6 py-4 text-sm text-zinc-800">
-                                <div class="flex items-center gap-2">
+                                <div class="text-nowrap flex items-center gap-2">
                                     @if ($user->schedule)
                                         @if ($user->schedule->type === 'day')
                                             <span
@@ -161,7 +163,7 @@
                             <td class="px-6 py-4 text-sm text-zinc-800">
                                 @if ($user->marksYesterday->isNotEmpty() && $user->countMarksYesterday === 4)
                                     <span
-                                        class="flex w-max items-center gap-1 rounded-lg bg-green-100 px-2 py-1 font-poppins text-xs font-bold text-green-500">
+                                        class="text-nowrap flex w-max items-center gap-1 rounded-lg bg-green-100 px-2 py-1 font-poppins text-xs font-bold text-green-500">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round"
@@ -179,7 +181,7 @@
                                 @else
                                     <div class="flex items-center gap-2">
                                         <span
-                                            class="flex items-center gap-1 rounded-lg bg-red-100 px-2 py-1 font-poppins text-xs font-bold text-red-500">
+                                            class="text-nowrap flex items-center gap-1 rounded-lg bg-red-100 px-2 py-1 font-poppins text-xs font-bold text-red-500">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round"
@@ -192,7 +194,7 @@
                                         </span>
                                         @if ($user->hasPermission)
                                             <span
-                                                class="flex items-center gap-1 rounded-lg bg-blue-100 px-2 py-1 font-poppins text-xs font-bold text-blue-500">
+                                                class="text-nowrap flex items-center gap-1 rounded-lg bg-blue-100 px-2 py-1 font-poppins text-xs font-bold text-blue-500">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -318,7 +320,7 @@
 
     <!-- Modal para asignar septimo -->
     <div class="modal-seventh fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black bg-opacity-50">
-        <div class="w-[500px] rounded-lg bg-white p-6">
+        <div class="w-full rounded-lg bg-white p-6 sm:w-[500px]">
             <form action="{{ route('septimo.assign') }}" method="POST">
                 <h2 class="text-2xl font-bold">Asignar septimo</h2>
                 @csrf
@@ -354,7 +356,7 @@
 
     <!-- Modal para crear observaciones -->
     <div class="modal-observation fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black bg-opacity-50">
-        <div class="w-[500px] overflow-y-auto rounded-lg bg-white p-6">
+        <div class="w-full rounded-lg bg-white p-6 sm:w-[500px]">
             <form action="{{ route('observaciones.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <h2 class="mb-4 text-2xl font-bold text-primary">Crear observación</h2>

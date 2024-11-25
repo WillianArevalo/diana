@@ -1,14 +1,13 @@
 @extends('layouts.template')
 @section('title', 'Dashboard | RRHH')
 @section('content')
-    <div class="flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center justify-center overflow-x-hidden">
         <div class="mt-8 text-center">
             <h2 class="mt-4 font-roboto text-xl font-semibold uppercase text-white">
                 Asistencias de {{ $user->username }}
             </h2>
         </div>
-        <div
-            class="mb-4 mt-10 flex w-full items-center justify-center overflow-hidden overflow-x-auto px-4 font-roboto text-white">
+        <div class="mb-4 mt-10 flex w-full items-center justify-center overflow-x-auto px-4 font-roboto text-white">
             <table class="w-full divide-y divide-gray-200" id="marks-table">
                 <thead class="bg-red-800 font-roboto">
                     <tr>
