@@ -12,6 +12,8 @@ class Schedule extends Model
     protected $casts = [
         "time_start" => "datetime:H:i",
         "time_end" => "datetime:H:i",
+        "break_start" => "datetime:H:i",
+        "break_end" => "datetime:H:i",
     ];
 
     protected $fillable = [

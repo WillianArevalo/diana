@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sevent', function (Blueprint $table) {
+        Schema::create('holidays', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->string('day');
+            $table->string("name");
+            $table->date("date_start");
+            $table->date("date_end");
+            $table->foreignId("workplace_id")->constrained("workplace");
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sevent');
+        Schema::dropIfExists('holidays');
     }
 };

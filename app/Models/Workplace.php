@@ -23,4 +23,9 @@ class Workplace extends Model
     {
         return $this->belongsTo(Schedule::class, 'nighttime_schedule_id');
     }
+
+    public function holidays()
+    {
+        return $this->hasMany(Holiday::class);
+    }
 }

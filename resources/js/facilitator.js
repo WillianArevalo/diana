@@ -85,7 +85,7 @@ $(document).ready(function () {
 
     $(document).on("click", ".add-observation", function () {
         $(".modal-observation").removeClass("hidden").addClass("flex");
-        userIds.val($(this).data("user-id"));
+        $("#user_id").val($(this).data("user-id"));
     });
 
     $(document).on("click", "#assign-schedule", function () {

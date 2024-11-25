@@ -8,6 +8,14 @@ class Marking extends Model
 {
     protected $table = "marking";
 
+    protected $casts = [
+        "date" => "date",
+        "entry_time" => "datetime:H:i",
+        "exit_time" => "datetime:H:i",
+        "lunch_time_start" => "datetime:H:i",
+        "lunch_time_end" => "datetime:H:i",
+    ];
+
     protected $fillable = [
         "date",
         "user_id",

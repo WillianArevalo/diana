@@ -1,7 +1,6 @@
 @extends('layouts.template')
 @section('title', 'Dashboard | Facilitadores')
 @section('content')
-
     <div class="flex flex-col items-center justify-center">
         <div class="mt-8 text-center">
             <h1 class="mt-4 font-roboto text-2xl font-bold uppercase text-secondary">
@@ -37,6 +36,10 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
+                                Hora de fin
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-800">
                                 Hora de inicio de descanso
                             </th>
                             <th scope="col"
@@ -55,6 +58,9 @@
                                 <td class="px-6 py-4 text-sm text-zinc-800">{{ $schedule->date_end }}</td>
                                 <td class="px-6 py-4 text-sm text-zinc-800">
                                     {{ \Carbon\Carbon::parse($schedule->time_start)->format('h:i A') }}
+                                </td>
+                                <td class="px-6 py-4 text-sm text-zinc-800">
+                                    {{ \Carbon\Carbon::parse($schedule->time_end)->format('h:i A') }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-zinc-800">
                                     {{ \Carbon\Carbon::parse($schedule->break_start)->format('h:i A') }}
@@ -80,6 +86,10 @@
                         Crear horario
                     </a>
                 @endif
+                <a href="{{ route('asuetos.create') }}"
+                    class="rounded-md border-none bg-secondary px-4 py-2 font-poppins uppercase text-primary hover:bg-yellow-300">
+                    Crear asueto
+                </a>
                 <button id="assign-schedule"
                     class="hidden rounded-md border-none bg-zinc-200 px-4 py-2 font-poppins uppercase text-primary hover:bg-zinc-300">
                     Asignar horario
@@ -149,52 +159,85 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-sm text-zinc-800">
-                                @foreach ($user->marks as $mark)
-                                    @php
-                                        $count = 0;
-                                        if ($mark->entry_time) {
-                                            $count++;
-                                        }
-                                        if ($mark->exit_time) {
-                                            $count++;
-                                        }
-                                        if ($mark->lunch_time_start) {
-                                            $count++;
-                                        }
-                                        if ($mark->lunch_time_end) {
-                                            $count++;
-                                        }
-                                    @endphp
-                                    @if ($count === 4)
+                                @if ($user->marksYesterday->isNotEmpty() && $user->countMarksYesterday === 4)
+                                    <span
+                                        class="flex w-max items-center gap-1 rounded-lg bg-green-100 px-2 py-1 font-poppins text-xs font-bold text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-list-check h-5 w-5 text-current">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M3.5 5.5l1.5 1.5l2.5 -2.5" />
+                                            <path d="M3.5 11.5l1.5 1.5l2.5 -2.5" />
+                                            <path d="M3.5 17.5l1.5 1.5l2.5 -2.5" />
+                                            <path d="M11 6l9 0" />
+                                            <path d="M11 12l9 0" />
+                                            <path d="M11 18l9 0" />
+                                        </svg>
+                                        Marcas completas
+                                    </span>
+                                @else
+                                    <div class="flex items-center gap-2">
                                         <span
-                                            class="rounded-md bg-green-100 px-2 py-1 font-poppins text-xs font-bold text-green-500">
-                                            Marcas completas
-                                        </span>
-                                    @else
-                                        <span
-                                            class="rounded-md bg-red-100 px-2 py-1 font-poppins text-xs font-bold text-red-500">
+                                            class="flex items-center gap-1 rounded-lg bg-red-100 px-2 py-1 font-poppins text-xs font-bold text-red-500">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-x h-4 w-4 text-current">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M18 6l-12 12" />
+                                                <path d="M6 6l12 12" />
+                                            </svg>
                                             Marcas incompletas
                                         </span>
-                                    @endif
-                                @endforeach
+                                        @if ($user->hasPermission)
+                                            <span
+                                                class="flex items-center gap-1 rounded-lg bg-blue-100 px-2 py-1 font-poppins text-xs font-bold text-blue-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="icon icon-tabler icons-tabler-outline icon-tabler-check h-4 w-4 text-current">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M5 12l5 5l10 -10" />
+                                                </svg>
+                                                {{ $user->hasPermission->type }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                @endif
                             </td>
                             <td class="px-6 py-4 text-sm text-white">
                                 <div class="flex items-center gap-2">
-
-                                    <button data-user-id="{{ $user->id }}"
-                                        class="add-observation rounded-md bg-blue-500 px-2 py-1 font-poppins text-xs uppercase text-white hover:bg-blue-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-current"
-                                            class="icon icon-tabler icons-tabler-outline icon-tabler-eye-plus">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                            <path d="M12 18c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                                            <path d="M16 19h6" />
-                                            <path d="M19 16v6" />
-                                        </svg>
-                                    </button>
-
+                                    @if (!$user->last_permission || $user->last_permission_date > $user->current_date)
+                                        <button data-user-id="{{ $user->id }}"
+                                            class="add-observation rounded-md bg-blue-500 px-2 py-1 font-poppins text-xs uppercase text-white hover:bg-blue-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="h-5 w-5 text-current"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-eye-plus">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                <path d="M12 18c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                <path d="M16 19h6" />
+                                                <path d="M19 16v6" />
+                                            </svg>
+                                        </button>
+                                    @else
+                                        <button data-permission-id="{{ $user->last_permission->id }}"
+                                            class="show-observation rounded-md bg-green-500 px-2 py-1 font-poppins text-xs uppercase text-white hover:bg-green-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                class="h-5 w-5 text-current" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                <path
+                                                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                            </svg>
+                                        </button>
+                                    @endif
                                     <button data-user-id="{{ $user->id }}"
                                         class="assign-schedule rounded-md bg-secondary px-2 py-1 font-poppins text-xs uppercase text-primary hover:bg-yellow-300">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -209,7 +252,6 @@
                                             <path d="M10 3v18" />
                                         </svg>
                                     </button>
-
                                     <button data-user-id="{{ $user->id }}"
                                         class="assign-seventh rounded-md border bg-zinc-200 px-2 py-1 font-poppins text-xs uppercase text-zinc-800 hover:bg-zinc-300 hover:text-zinc-800">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -282,13 +324,19 @@
                 @csrf
                 <input type="hidden" name="user_ids">
                 <div class="relative flex flex-1 flex-col gap-2">
-                    <label for="date_seventh" class="mb-2 block text-sm font-medium text-white">
-                        Selecciona una fecha
+                    <label for="day" class="mb-2 block text-sm font-medium text-white">
+                        Selecciona un día
                     </label>
-                    <input type="date" name="date_seventh" id="date-input"
-                        class="w-full rounded-lg border-2 border-zinc-300 px-4 py-2 text-gray-800 placeholder:font-poppins placeholder:text-sm placeholder:font-light placeholder:tracking-wide placeholder:text-gray-400 focus:border-zinc-400 focus:outline-none">
-                    <div id="calendar" class="absolute top-20 z-50 mt-2 hidden rounded-md border bg-white p-4 shadow-lg">
-                    </div>
+                    <select name="day" id="day"
+                        class="w-full rounded-lg border-2 border-zinc-300 px-4 py-3 text-gray-800 placeholder:font-poppins placeholder:text-sm placeholder:font-light placeholder:tracking-wide placeholder:text-gray-400 focus:border-zinc-400 focus:outline-none">
+                        <option value="" class="text-gray-400">Selecciona un día</option>
+                        <option value="Lunes">Lunes</option>
+                        <option value="Martes">Martes</option>
+                        <option value="Miercoles">Miércoles</option>
+                        <option value="Jueves">Jueves</option>
+                        <option value="Viernes">Viernes</option>
+                        <option value="Sabado">Sábado</option>
+                    </select>
                 </div>
                 <div class="mt-4 flex items-center justify-end gap-4">
                     <button type="submit"
@@ -307,10 +355,13 @@
     <!-- Modal para crear observaciones -->
     <div class="modal-observation fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black bg-opacity-50">
         <div class="w-[500px] overflow-y-auto rounded-lg bg-white p-6">
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('observaciones.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <h2 class="mb-4 text-2xl font-bold text-primary">Crear observación</h2>
                 <input type="hidden" name="user_id" id="user_id">
+                @error('user_id')
+                    <span class="text-xs text-red-500">{{ $message }}</span>
+                @enderror
                 <div class="flex flex-col">
                     <label for="type" class="mb-2 block text-sm font-medium text-zinc-800">
                         Tipo de observación
@@ -318,8 +369,8 @@
                     <select name="type" id="type"
                         class="w-full rounded-lg border-2 border-zinc-300 px-4 py-2.5 text-gray-800 placeholder:font-poppins placeholder:text-sm placeholder:font-light placeholder:tracking-wide placeholder:text-gray-400 focus:border-zinc-400 focus:outline-none">
                         <option value="" class="text-gray-400">Selecciona un tipo</option>
-                        <option value="Permison con">
-                            Permison con
+                        <option value="Permiso con">
+                            Permiso con
                         </option>
                         <option value="Permiso sin">
                             Permiso sin
@@ -331,20 +382,29 @@
                             Otros
                         </option>
                     </select>
+                    @error('type')
+                        <span class="text-xs text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="mt-4 flex flex-1 flex-col">
                     <label for="start_date" class="mb-2 block text-sm font-medium text-zinc-800">
                         Fecha y hora de inicio del permiso
                     </label>
-                    <input type="date" name="start_date" id="start_date"
+                    <input type="datetime-local" name="date_start" id="date_start"
                         class="w-full rounded-lg border-2 border-zinc-300 px-4 py-2 text-gray-800 placeholder:font-poppins placeholder:text-sm placeholder:font-light placeholder:tracking-wide placeholder:text-gray-400 focus:border-zinc-400 focus:outline-none">
+                    @error('date_start')
+                        <span class="text-xs text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="mt-4 flex flex-1 flex-col">
                     <label for="end_date" class="mb-2 block text-sm font-medium text-zinc-800">
                         Fecha y hora de fin del permiso
                     </label>
-                    <input type="date" name="end_date" id="end_date"
+                    <input type="datetime-local" name="date_end" id="date_end"
                         class="w-full rounded-lg border-2 border-zinc-300 px-4 py-2 text-gray-800 placeholder:font-poppins placeholder:text-sm placeholder:font-light placeholder:tracking-wide placeholder:text-gray-400 focus:border-zinc-400 focus:outline-none">
+                    @error('date_end')
+                        <span class="text-xs text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="mt-4 flex flex-1 flex-col">
                     <label for="description" class="mb-2 block text-sm font-medium text-zinc-800">
@@ -356,11 +416,14 @@
                 </div>
 
                 <div class="mt-4">
-                    <label for="file" class="mb-2 block text-sm font-medium text-zinc-800">
+                    <label for="document" class="mb-2 block text-sm font-medium text-zinc-800">
                         Adjunta un archivo
                     </label>
-                    <input type="file" name="file" id="file"
+                    <input type="file" name="document" id="document"
                         class="w-full rounded-lg border-2 border-zinc-300 px-4 py-2 text-gray-800 placeholder:font-poppins placeholder:text-sm placeholder:font-light placeholder:tracking-wide placeholder:text-gray-400 focus:border-zinc-400 focus:outline-none">
+                    @error('document')
+                        <span class="text-xs text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mt-4 flex items-center justify-end gap-4">

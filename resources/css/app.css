@@ -5,3 +5,72 @@
 body {
     font-family: "Roboto", sans-serif;
 }
+
+.fc {
+    background-color: #f4f4f9;
+}
+
+.fc-toolbar {
+    background-color: #941212;
+    color: white;
+    font-family: "Arial", sans-serif;
+    padding-bottom: 20px;
+}
+
+/* Cambiar el color del día actual */
+.fc-day-today {
+    background-color: #ffeb3b;
+    color: black;
+}
+
+/* Estilo para los días seleccionados */
+.fc-day-selected {
+    background-color: #2196f3;
+    color: white;
+}
+
+/* Estilo de los eventos */
+.fc-event {
+    background-color: #ff9800;
+    color: white;
+    border-radius: 5px;
+    font-size: 12px;
+    border: none;
+}
+
+/* Cambiar el color de los botones del calendario */
+.fc-button {
+    background-color: #2196f3;
+    color: white;
+}
+
+.fc-button:hover {
+    background-color: #0d47a1;
+}
+
+/* Cambiar el color de los eventos en la vista de lista */
+.fc-list-event {
+    background-color: #4caf50;
+    color: white;
+}
+
+.fc-col-header-cell {
+    background-color: #941212;
+    color: white;
+    text-transform: uppercase;
+}
+
+.fc-col-header-cell-cushion {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+}
+
+.fc-toolbar-title {
+    font-family: "Poppins", sans-serif;
+    padding-inline: 20px;
+    text-transform: uppercase;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0px;
+}

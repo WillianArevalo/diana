@@ -8,7 +8,7 @@ class Seventh extends Model
 {
     protected $table = 'sevent';
 
-    protected $fillable = ['user_id', 'date_seventh'];
+    protected $fillable = ['user_id', 'day'];
 
     public function user()
     {

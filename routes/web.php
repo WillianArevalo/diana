@@ -14,6 +14,9 @@ Route::post("/logout", [LoginController::class, "logout"])->name("logout");
 
 Route::get("/facilitadores", [FacilitatorsController::class, "index"])->name("facilitadores.dashboard");
 Route::post("/septimo/asignar", [FacilitatorsController::class, "assignSeventh"])->name("septimo.assign");
+Route::post("/observaciones/crear", [FacilitatorsController::class, "storePermission"])->name("observaciones.store");
+Route::get("/asuetos/crear", [FacilitatorsController::class, "createHoliday"])->name("asuetos.create");
+Route::post("/asuetos/crear", [FacilitatorsController::class, "storeHoliday"])->name("asuetos.store");
 
 Route::get("/colaboradores", [CollaboratorsController::class, "index"])->name("colaboradores.dashboard");
 Route::get("/error/register-marking", [CollaboratorsController::class, "registerMarkingError"])->name("error.register-marking");
@@ -25,3 +28,7 @@ Route::post("/horarios/crear", [ScheduleController::class, "store"])->name("hora
 Route::post("/horarios/asignar", [ScheduleController::class, "assign"])->name("horarios.assign");
 
 Route::get("/rrhh", [RRHHController::class, "index"])->name("rrhh.dashboard");
+Route::get("/rrhh/asistencias", [RRHHController::class, "asistencias"])->name("rrhh.asistencias");
+Route::get("/rrhh/asistencias/excel", [RRHHController::class, "generateExcel"])->name("rrhh.asistencias.excel");
+
+Route::get("/asistencias", [RRHHController::class, "getAsistencias"])->name("rrhh.asistencias.get");

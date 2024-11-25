@@ -24,9 +24,8 @@
     @include('layouts.__partials.alert')
     <div class="flex h-24 items-center justify-between">
         <div>
-            <img src="{{ asset('images/diana.png') }}" alt="bg" class="h-14 w-full border object-cover">
+            <img src="{{ asset('images/diana.png') }}" alt="bg" class="h-14 w-full object-cover">
         </div>
-
         <div class="flex items-center gap-4">
             <form action="{{ route('logout') }}" method="POST">
                 @csrf

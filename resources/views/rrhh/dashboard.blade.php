@@ -8,7 +8,20 @@
             </h2>
         </div>
         <div class="mb-4 mt-10 w-3/4 overflow-x-auto font-roboto text-white">
-            <table id="table-rrhh" class="divide-y divide-gray-200">
+            <div class="flex items-center justify-end gap-2 py-4">
+                <select name="workplace" id="workplace"
+                    class="w-90 rounded-lg border-2 border-white px-4 py-2 text-gray-800 placeholder:font-poppins placeholder:text-sm placeholder:font-light placeholder:tracking-wide placeholder:text-gray-400 focus:border-white focus:outline-none">
+                    <option value="">Todos</option>
+                    @foreach ($workplaces as $workplace)
+                        <option value="{{ $workplace->name }}">{{ $workplace->name }}</option>
+                    @endforeach
+                </select>
+                <a href="{{ route('rrhh.asistencias') }}"
+                    class="rounded-md bg-secondary px-4 py-2 font-poppins uppercase text-primary hover:bg-yellow-300">
+                    Ver asistencias
+                </a>
+            </div>
+            <table id="table-rrhh" class="divide-y divide-gray-200 text-sm text-zinc-800">
                 <thead class="bg-red-800 font-roboto">
                     <tr>
                         <th scope="col"
