@@ -57,7 +57,7 @@ $(document).ready(function () {
         const lng_user = position.coords.longitude;
 
         const distance = calculateDistance(lat_user, lng_user, lat, lng);
-        console.log(distance);
+        console.log(lat_user, lng_user, lat, lng);
 
         if (distance > 0.1) {
             Swal.fire({
@@ -66,6 +66,8 @@ $(document).ready(function () {
                 icon: "warning",
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#3085d6",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = "/error/register-marking";

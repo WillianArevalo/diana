@@ -225,20 +225,6 @@
                                                 <path d="M19 16v6" />
                                             </svg>
                                         </button>
-                                    @else
-                                        <button data-permission-id="{{ $user->last_permission->id }}"
-                                            class="show-observation rounded-md bg-green-500 px-2 py-1 font-poppins text-xs uppercase text-white hover:bg-green-600">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                class="h-5 w-5 text-current" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                                <path
-                                                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                                            </svg>
-                                        </button>
                                     @endif
                                     <button data-user-id="{{ $user->id }}"
                                         class="assign-schedule rounded-md bg-secondary px-2 py-1 font-poppins text-xs uppercase text-primary hover:bg-yellow-300">
@@ -282,7 +268,7 @@
 
     <!-- Modal para asignar horario -->
     <div class="modal fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black bg-opacity-50">
-        <div class="w-[500px] rounded-lg bg-white p-6">
+        <div class="w-[500px] animate-jump-in rounded-lg bg-white p-6 animate-duration-300">
             <form action="{{ route('horarios.assign') }}" method="POST">
                 <h2 class="text-2xl font-bold">Asignar horario</h2>
                 <div class="mt-4">
@@ -320,7 +306,7 @@
 
     <!-- Modal para asignar septimo -->
     <div class="modal-seventh fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black bg-opacity-50">
-        <div class="w-full rounded-lg bg-white p-6 sm:w-[500px]">
+        <div class="w-full animate-jump-in rounded-lg bg-white p-6 animate-duration-300 sm:w-[500px]">
             <form action="{{ route('septimo.assign') }}" method="POST">
                 <h2 class="text-2xl font-bold">Asignar septimo</h2>
                 @csrf
@@ -356,7 +342,7 @@
 
     <!-- Modal para crear observaciones -->
     <div class="modal-observation fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black bg-opacity-50">
-        <div class="w-full rounded-lg bg-white p-6 sm:w-[500px]">
+        <div class="w-full animate-jump-in rounded-lg bg-white p-6 animate-duration-300 sm:w-[500px]">
             <form action="{{ route('observaciones.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <h2 class="mb-4 text-2xl font-bold text-primary">Crear observación</h2>

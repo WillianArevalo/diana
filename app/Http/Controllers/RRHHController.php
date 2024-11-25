@@ -255,15 +255,14 @@ class RRHHController extends Controller
                 }
 
 
-                foreach ($user->marks as $mark) {
-                    $mark->isHoliday = $holidays->some(function ($holiday) use ($mark) {
-                        $markDate = \Carbon\Carbon::parse($mark->date);
-                        $holidayStart = \Carbon\Carbon::parse($holiday->date_start);
-                        $holidayEnd = \Carbon\Carbon::parse($holiday->date_end);
+                $mark->isHoliday = $holidays->some(function ($holiday) use ($mark) {
+                    $markDate = \Carbon\Carbon::parse($mark->date);
+                    $holidayStart = \Carbon\Carbon::parse($holiday->date_start);
+                    $holidayEnd = \Carbon\Carbon::parse($holiday->date_end);
 
-                        return $markDate->between($holidayStart, $holidayEnd);
-                    });
-                }
+                    return $markDate->between($holidayStart, $holidayEnd);
+                });
+
 
                 $hours_schedule = 0;
 
@@ -423,6 +422,7 @@ class RRHHController extends Controller
                     }
                 }
 
+
                 $mark->HRD = $HRD;
                 $mark->HED = $HED;
                 $mark->HRN = $HRN;
@@ -437,6 +437,12 @@ class RRHHController extends Controller
                 $mark->HEDF = $HEDF;
                 $mark->HRNF = $HRNF;
                 $mark->HENF = $HENF;
+
+
+                $mark->user = $user->username;
+                $mark->cod_user = $user->cod_user;
+                $mark->schedule = $schedule->type;
+                $mark->day = strtolower(Carbon::parse($mark->date)->locale('es')->shortDayName);
             }
 
             if ($user->permissions) {
@@ -490,7 +496,11 @@ class RRHHController extends Controller
             $user->marks = $marks->merge($permissions);
         }
 
-        return $users;
+        $marks = $user->marks->mapWithKeys(function ($item, $index) {
+            return [$index => $item];
+        })->toArray();
+
+        return $marks;
     }
 
     public function generateExcel()
@@ -511,40 +521,90 @@ class RRHHController extends Controller
             ],
         ]);
 
+        $sheet->setCellValue('L5', 'Normales');
+        $sheet->mergeCells('L5:O5');
+        $sheet->getStyle('L5:O5')->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+        $sheet->setCellValue('P5', 'Séptimo');
+        $sheet->mergeCells('P5:U5');
+        $sheet->getStyle('P5:U5')->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+        $sheet->setCellValue('V5', 'Feriados');
+        $sheet->mergeCells('V5:Z5');
+        $sheet->getStyle('V5:Z5')->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+        $sheet->setCellValue('l4', '100%');
+        $sheet->setCellValue('M4', '125%');
+        $sheet->setCellValue('N4', '250%');
+        $sheet->setCellValue('O4', '200%');
+        $sheet->setCellValue('P4', '100%');
+        $sheet->setCellValue('Q4', '100%');
+        $sheet->setCellValue('R4', '150%');
+        $sheet->setCellValue('S4', '188%');
+        $sheet->setCellValue('T4', '300%');
+        $sheet->setCellValue('U4', '350%');
+        $sheet->setCellValue('V4', '100%');
+        $sheet->setCellValue('W4', '200%');
+        $sheet->setCellValue('X4', '250%');
+        $sheet->setCellValue('Y4', '400%');
+        $sheet->setCellValue('Z4', '500%');
+
+
         // 2. Encabezados de columnas
-        $sheet->setCellValue('A2', 'Código empleado');
-        $sheet->setCellValue('B2', 'Nombre');
-        $sheet->setCellValue('C2', 'Día');
-        $sheet->setCellValue('D2', 'Fecha');
-        $sheet->setCellValue('E2', 'Horario');
-        $sheet->setCellValue('F2', 'Entrada');
-        $sheet->setCellValue('G2', 'R.Salida');
-        $sheet->setCellValue('H2', 'R.Entrada');
-        $sheet->setCellValue('I2', 'Salida');
-        $sheet->setCellValue('J2', 'Tipo');
-        $sheet->setCellValue('K2', 'SAB');
+        $sheet->setCellValue('A6', 'Código empleado');
+        $sheet->setCellValue('B6', 'Nombre');
+        $sheet->setCellValue('C6', 'Día');
+        $sheet->setCellValue('D6', 'Fecha');
+        $sheet->setCellValue('E6', 'Horario');
+        $sheet->setCellValue('F6', 'Entrada');
+        $sheet->setCellValue('G6', 'R.Salida');
+        $sheet->setCellValue('H6', 'R.Entrada');
+        $sheet->setCellValue('I6', 'Salida');
+        $sheet->setCellValue('J6', 'Tipo');
+        $sheet->setCellValue('K6', 'SAB');
 
-        $sheet->setCellValue('L2', 'HRD');
-        $sheet->setCellValue('M2', 'HRN');
-        $sheet->setCellValue('N2', 'HEN');
-        $sheet->setCellValue('O2', 'HED');
+        $sheet->setCellValue('L6', 'HRD');
+        $sheet->setCellValue('M6', 'HRN');
+        $sheet->setCellValue('N6', 'HEN');
+        $sheet->setCellValue('O6', 'HED');
 
-        $sheet->setCellValue('P2', 'H.SEP');
-        $sheet->setCellValue('Q2', 'H.COM');
-        $sheet->setCellValue('R2', 'HRD');
-        $sheet->setCellValue('S2', 'HRN');
-        $sheet->setCellValue('T2', 'HED');
-        $sheet->setCellValue('U2', 'HEN');
+        $sheet->setCellValue('P6', 'H.SEP');
+        $sheet->setCellValue('Q6', 'H.COM');
+        $sheet->setCellValue('R6', 'HRD');
+        $sheet->setCellValue('S6', 'HRN');
+        $sheet->setCellValue('T6', 'HED');
+        $sheet->setCellValue('U6', 'HEN');
 
-        $sheet->setCellValue('V2', 'HFE');
-        $sheet->setCellValue('W2', 'HRD');
-        $sheet->setCellValue('X2', 'HRN');
-        $sheet->setCellValue('Y2', 'HED');
-        $sheet->setCellValue('Z2', 'HEN');
-        $sheet->setCellValue('AA2', 'OBSERVACIONES');
+        $sheet->setCellValue('V6', 'HFE');
+        $sheet->setCellValue('W6', 'HRD');
+        $sheet->setCellValue('X6', 'HRN');
+        $sheet->setCellValue('Y6', 'HED');
+        $sheet->setCellValue('Z6', 'HEN');
+        $sheet->setCellValue('AA6', 'OBSERVACIONES');
 
         // Estilo para encabezados
-        $sheet->getStyle('A2:N2')->applyFromArray([
+        $sheet->getStyle('A6:AA6')->applyFromArray([
             'font' => [
                 'bold' => true,
             ],
@@ -563,50 +623,48 @@ class RRHHController extends Controller
 
         // 3. Rellenar datos dinámicamente
         $data = $this->getAsistencias();
-        $row = 3;
+        $row = 7;
+        foreach ($data as $mark) {
+            $sheet->setCellValue('A' . $row, $mark["cod_user"]);
+            $sheet->setCellValue('B' . $row, $mark["user"]);
+            $sheet->setCellValue('C' . $row, ucfirst($mark["day"]));
+            $sheet->setCellValue('D' . $row, Carbon::parse($mark["date"])->format('d/m/Y'));
+            $sheet->setCellValue('E' . $row, $mark["schedule"] == "day" ? "Diurno" : "Nocturno");
+            $sheet->setCellValue('F' . $row, $mark["entry_time"]);
+            $sheet->setCellValue('G' . $row, $mark["exit_time"]);
+            $sheet->setCellValue('H' . $row, $mark["lunch_time_start"]);
+            $sheet->setCellValue('I' . $row, $mark["lunch_time_end"]);
+            $sheet->setCellValue('J' . $row, $mark["type"]);
+            $sheet->setCellValue('K' . $row, "");
 
-        foreach ($data as $user) {
-            if ($user->marks) {
+            $sheet->setCellValue('L' . $row, $mark["HRD"]);
+            $sheet->setCellValue('M' . $row, $mark["HRN"]);
+            $sheet->setCellValue('N' . $row, $mark["HEN"]);
+            $sheet->setCellValue('O' . $row, $mark["HED"]);
 
-                foreach ($user->marks as $mark) {
-                    $sheet->setCellValue('A' . $row, $user->cod_user);
-                    $sheet->setCellValue('B' . $row, $user->username);
-                    $sheet->setCellValue('C' . $row, strtolower(Carbon::parse($mark->date)->locale('es')->shortDayName));
-                    $sheet->setCellValue('D' . $row, Carbon::parse($mark->date)->format('d/m/Y'));
-                    $sheet->setCellValue('E' . $row, $user->schedule->type);
-                    $sheet->setCellValue('F' . $row, $mark->entry_time);
-                    $sheet->setCellValue('G' . $row, $mark->exit_time);
-                    $sheet->setCellValue('H' . $row, $mark->lunch_time_start);
-                    $sheet->setCellValue('I' . $row, $mark->lunch_time_end);
-                    $sheet->setCellValue('J' . $row, $mark->type);
-                    $sheet->setCellValue('K' . $row, $mark->is_holiday);
-
-                    $sheet->setCellValue('L' . $row, $mark->HRD);
-                    $sheet->setCellValue('M' . $row, $mark->HRN);
-                    $sheet->setCellValue('N' . $row, $mark->HEN);
-                    $sheet->setCellValue('O' . $row, $mark->HED);
-
-                    $sheet->setCellValue('P' . $row, $mark->HRDS);
-                    $sheet->setCellValue('Q' . $row, "");
-                    $sheet->setCellValue('R' . $row, $mark->HRDS);
-                    $sheet->setCellValue('S' . $row, $mark->HRNS);
-                    $sheet->setCellValue('T' . $row, $mark->HEDS);
-                    $sheet->setCellValue('U' . $row, $mark->HENS);
+            $sheet->setCellValue('P' . $row, $mark["HRDS"]);
+            $sheet->setCellValue('Q' . $row, "");
+            $sheet->setCellValue('R' . $row, $mark["HRDS"]);
+            $sheet->setCellValue('S' . $row, $mark["HRNS"]);
+            $sheet->setCellValue('T' . $row, $mark["HEDS"]);
+            $sheet->setCellValue('U' . $row, $mark["HENS"]);
 
 
-                    $sheet->setCellValue('V' . $row, $mark->HRDF);
-                    $sheet->setCellValue('W' . $row, $mark->HRNF);
-                    $sheet->setCellValue('X' . $row, $mark->HRNF);
-                    $sheet->setCellValue('Y' . $row, $mark->HEDF);
-                    $sheet->setCellValue('Z' . $row, $mark->HENF);
-                    $sheet->setCellValue('AA' . $row, "Sin observaciones");
-                    $row++;
-                }
-            }
+            $sheet->setCellValue('V' . $row, $mark["HRDF"]);
+            $sheet->setCellValue('W' . $row, $mark["HRNF"]);
+            $sheet->setCellValue('X' . $row, $mark["HEDF"]);
+            $sheet->setCellValue('Y' . $row, $mark["HENF"]);
+            $sheet->setCellValue('Z' . $row, "Sin observaciones");
+            $row++;
         }
 
+        foreach (range('A', 'Z') as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+
         // 4. Estilo para los datos
-        $sheet->getStyle('A3:D' . ($row - 1))->applyFromArray([
+        $sheet->getStyle('A7:AA' . ($row - 1))->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => Border::BORDER_THIN,
@@ -616,7 +674,7 @@ class RRHHController extends Controller
 
         // 5. Descargar el archivo
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Reporte_Ventas.xlsx';
+        $filename = 'reporte_asistencias.xlsx';
 
         // Cabeceras para descarga
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
